@@ -1,0 +1,16 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname aoc2020-02-01) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; ==========================================
+;; Day 2:Password Philosophy – Part 1
+;; ==========================================
+
+;; Data Definitions
+;; ==========================================
+
+(define-struct passwordItem (rule password))
+;; Password Item is (make-passwordItem String String)
+;; interp rule is the password polit
+;;        password is the password
+
+(define PW1 (make-passwordItem "1-3 a" "abcde"))
