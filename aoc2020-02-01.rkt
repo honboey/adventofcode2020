@@ -135,7 +135,12 @@
 (check-expect (createRule "1-10 a: ")   (make-rule  1 10 "a")) ;if 2nd = "-" and 5th = " " take out 1st   3-4th 6th
 (check-expect (createRule "17-18 n: ")  (make-rule 17 18 "n")) ;if 3rd = "-"               take out 1-2nd 4-5th 7th
 
-(define (createRule s) (make-rule  1  3 "a")) ; stub
+; (define (createRule s) (make-rule  1  3 "a")) ; stub
+
+(define (createRule s)
+  (cond [q a]
+        [q a]
+        [q a]))
 
 
 ;; runTest
