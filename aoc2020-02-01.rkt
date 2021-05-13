@@ -89,7 +89,7 @@
 ;; =========
 
 ;; ListOfPasswords -> ListOfPasswords
-;; A list of valid passwords
+;; Consume ListOfPasswords and produce a list of valid passwords
 (check-expect (validList empty) empty)
 (check-expect (validList (list (make-pw "1-3 a: " "abcde")
                                (make-pw "1-3 b: " "cdefg")
@@ -122,8 +122,23 @@
 
 ;; Template taken from Password
 (define (valid? p)
-  (runTest (createRule (pw-rule p))       
-           (pw-password p)))
+  (createRule (pw-rule p)        ; String
+       (pw-password p)))  ; String
+
+
+;; runTest
+;; =======
+
+;; Rule List -> Boolean
+;; Consume a Rule and test against String (password)
+(check-expect (runTest (make-rule  1  3 "a") 3)   true)
+(check-expect (runTest (make-rule  1 10 "a") 11) false)
+
+; (define (runTest r n) false) ; stub
+
+;; Template taken from Function Composition
+(define (runTest r n)
+  (countChar (rule-letter r) (pw-password p)))
 
 
 ;; createRule
@@ -138,19 +153,33 @@
 ; (define (createRule s) (make-rule  1  3 "a")) ; stub
 
 (define (createRule s)
-  (cond [q a]
-        [q a]
-        [q a]))
+  (cond [(and (string-ci=? "-" (string-ith s 1))
+              (string-ci=? " " (string-ith s 3)))         ;if 2nd = "-" and 4th = " " take out 1st   3rd   5th
+         (make-rule (string->number (string-ith s 0))
+                    (string->number (string-ith s 2))
+                    (string-ith s 4))]
+        [(and (string-ci=? "-" (string-ith s 1))
+              (string-ci=? " " (string-ith s 4)))         ;if 2nd = "-" and 5th = " " take out 1st   3-4th 6th
+         (make-rule (string->number (string-ith s 0))
+                    (string->number (substring s 2 4))
+                    (string-ith s 5))]
+        [(string-ci=? "-" (string-ith s 2))               ;if 3rd = "-" take out 1-2nd 4-5th 7th
+         (make-rule (string->number (substring s 0 2))
+                    (string->number (substring s 3 5))
+                    (string-ith s 6))]))
 
 
-;; runTest
-;; =======
 
-;; ListOfRuleElements String -> Boolean
-;; Turn ListOfRuleElements to a test to run against String (password)
-;; !!!
+;; countChar
+;; =========
 
-(define (runTest r s) false)
+;; Character ListOfCharacters -> Number
+;; Get ListOfCharacters and count number of relevant character in list
+(check-expect (countChar empty) 0)
+
+(define (countChar c loc) true)
+
+
 
 
 
