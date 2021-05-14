@@ -35,6 +35,7 @@
 
 (define R1 (make-rule 1 3 "b"))
 
+#;
 (define (fn-for-rule r)
   (... (rule-min r)        ; Natural
        (rule-max r)        ; Natural
@@ -122,37 +123,22 @@
 
 ;; Template taken from Password
 (define (valid? p)
-  (createRule (pw-rule p)        ; String
-       (pw-password p)))  ; String
+  (runTest (pullApartRule (pw-rule p))        ; String
+           (pw-password p)))                  ; String
 
 
-;; runTest
-;; =======
-
-;; Rule List -> Boolean
-;; Consume a Rule and test against String (password)
-(check-expect (runTest (make-rule  1  3 "a") 3)   true)
-(check-expect (runTest (make-rule  1 10 "a") 11) false)
-
-; (define (runTest r n) false) ; stub
-
-;; Template taken from Function Composition
-(define (runTest r n)
-  (countChar (rule-letter r) (pw-password p)))
-
-
-;; createRule
-;; ==========
+;; pullApartRule
+;; =============
 
 ;; String -> Rule
 ;; Get (pw-rule) and take out the first Number, the second Number and the letter (String)
-(check-expect (createRule "1-3 a: ")    (make-rule  1  3 "a")) ;if 2nd = "-" and 4th = " " take out 1st   3rd   5th 
-(check-expect (createRule "1-10 a: ")   (make-rule  1 10 "a")) ;if 2nd = "-" and 5th = " " take out 1st   3-4th 6th
-(check-expect (createRule "17-18 n: ")  (make-rule 17 18 "n")) ;if 3rd = "-"               take out 1-2nd 4-5th 7th
+(check-expect (pullApartRule "1-3 a: ")    (make-rule  1  3 "a")) ;if 2nd = "-" and 4th = " " take out 1st   3rd   5th 
+(check-expect (pullApartRule "1-10 a: ")   (make-rule  1 10 "a")) ;if 2nd = "-" and 5th = " " take out 1st   3-4th 6th
+(check-expect (pullApartRule "17-18 n: ")  (make-rule 17 18 "n")) ;if 3rd = "-"               take out 1-2nd 4-5th 7th
 
-; (define (createRule s) (make-rule  1  3 "a")) ; stub
+; (define (pullApartRule s) (make-rule  1  3 "a")) ; stub
 
-(define (createRule s)
+(define (pullApartRule s)
   (cond [(and (string-ci=? "-" (string-ith s 1))
               (string-ci=? " " (string-ith s 3)))         ;if 2nd = "-" and 4th = " " take out 1st   3rd   5th
          (make-rule (string->number (string-ith s 0))
@@ -170,16 +156,75 @@
 
 
 
-;; countChar
+;; runTest
+;; =======
+
+;; Rule String -> Boolean
+;; Consume a Rule and test against String (password)
+(check-expect (runTest (make-rule  1  3 "a") "abcde")         true)
+(check-expect (runTest (make-rule  1 10 "a") "aaaaaaaaaava") false)
+
+; (define (runTest r s) false) ; stub
+
+;; Template taken from Function Composition
+
+(define (runTest r s)
+  (and (>= (charCount (rule-letter r) s) (rule-min r))
+       (<= (charCount (rule-letter r) s) (rule-max r))))
+
+
+
+;; charCount
 ;; =========
 
-;; Character ListOfCharacters -> Number
-;; Get ListOfCharacters and count number of relevant character in list
-(check-expect (countChar empty) 0)
+;; String String -> Number
+;; Count the number of occurences of a certain letter in a string
+(check-expect (charCount "a" "b")  0)
+(check-expect (charCount "a" "a")  1)
+(check-expect (charCount "a" "ba") 1)
+(check-expect (charCount "a" "bc") 0)
 
-(define (countChar c loc) true)
+; (define (charCount s1 s2) 1) ;
+
+(define (charCount s1 s2)
+  (length (filterList s1 s2)))
 
 
+;; filterList
+;; ==========
+
+;; String String -> ListOfChar
+;; Create a ListOfChar of a specific letter in a String
+(check-expect (filterList "a" "a") (list #\a))
+(check-expect (filterList "a" "b") empty)
+(check-expect (filterList "a" "ab") (list #\a))
+(check-expect (filterList "a" "aba") (list #\a #\a))
+
+; (define (filter s1 s2) empty) ; stub
+
+(define (filterList s1 s2)
+  (filter s1 (string->list s2)))
 
 
+;; filter
+;; ======
+
+;; String ListOfChar -> ListOfChar
+;; Remove the instances of String from ListOfChar
+;; !!!
+(check-expect (filter "a" empty)               empty)
+(check-expect (filter "a" (list #\a))          (list #\a))
+(check-expect (filter "a" (list #\b))          empty)
+(check-expect (filter "a" (list #\a #\b))      (list #\a))
+(check-expect (filter "a" (list #\a #\b #\a))  (list #\a #\a))
+(check-expect (filter "a" (list #\b #\b #\a))  (list #\a))
+
+; (define (filter s1 loc) empty) ;
+
+(define (filter s loc)
+  (cond [(empty? loc) empty]
+        [else
+         (if (char-ci=? (string-ref s 0) (first loc))
+             (cons (first loc) (filter s (rest loc)))
+             (filter s (rest loc)))]))
 
