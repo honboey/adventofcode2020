@@ -9,7 +9,7 @@
 ;; ==========================================
 
 ;; Password
-;;=========
+;; ========
 
 (define-struct pw (rule password))
 ;; Password is (make-pw String String)
@@ -78,6 +78,11 @@
                               (make-pw "1-3 b: " "cdefg")      ; not valid
                               (make-pw "2-9 c: " "cccccccc"))) ; valid
               2)
+(check-expect (quantity (list (make-pw "4-6 b: " "bbbdbtbbbj") 
+                              (make-pw "1-6 g: " "ggvggbgggstg")
+                              (make-pw "1-4 s: " "lsssss")))
+              0)
+
 
 ; (define (quantity lop) 0) ; stub
 
