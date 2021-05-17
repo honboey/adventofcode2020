@@ -116,6 +116,30 @@
   (length (makeLoT (reverse (makeLoP (length lor))) lor)))
 
 
+;;; numOfRows
+;;; =========
+;
+;;; ListOfRows -> Natural
+;;; interp. determine number of rows in a list
+;(check-expect (numOfRows empty) 0)
+;(check-expect (numOfRows (list "..##......."
+;                              "#...#...#.."
+;                              ".#....#..#."
+;                              "..#.#...#.#"
+;                              ".#...##..#."
+;                              "..#.##....."
+;                              ".#.#.#....#"
+;                              ".#........#"
+;                              "#.##...#..."
+;                              "#...##....#"
+;                              ".#..#...#.#")) 11)
+;
+;; (define (numOfRows lor) 0) ; stub
+;
+;(define (numOfRows lor)
+;  (length lor))
+
+
 ;; makeLoP
 ;; =======
 
@@ -123,17 +147,17 @@
 ;; Consume a natural and create n number of positions in list
 (check-expect (makeLoP 0)  empty)
 (check-expect (makeLoP 1)  (list (make-position 0  0)))
-(check-expect (makeLoP 11) (list (make-position 0  0)
-                                 (make-position 3  1)
-                                 (make-position 6  2)
-                                 (make-position 9  3)
-                                 (make-position 12 4)
-                                 (make-position 15 5)
-                                 (make-position 18 6)
-                                 (make-position 21 7)
-                                 (make-position 24 8)
+(check-expect (makeLoP 11) (list (make-position 30 10)
                                  (make-position 27 9)
-                                 (make-position 30 10)))
+                                 (make-position 24 8)
+                                 (make-position 21 7)
+                                 (make-position 18 6)
+                                 (make-position 15 5)
+                                 (make-position 12 4)
+                                 (make-position 9 3)
+                                 (make-position 6 2)
+                                 (make-position 3 1)
+                                 (make-position 0 0)))
 
 ; (define (makeLoP n) empty) ; stub
 
