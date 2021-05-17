@@ -1,0 +1,29 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname aoc2020-03-01) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; ==========================================
+Day 3: Toboggan Trajectory – Part 1
+;; ==========================================
+
+
+;; Data Definitions
+;; ==========================================
+
+;; Row is String
+;; interp. a row consisting of open squares (.) and trees (#)
+(define R1 "..##.......")
+
+(define (fn-for-row r)
+  (... r))
+;; Rules used:
+;;  - Atomic non-distinct: String
+
+
+;; ListOfRows is one of:
+;;  - empty
+;;  - (cons Row ListOfRows)
+;; interp a list of rows
+
+(define LOR0 empty)
+(define LOR1 (cons "..##......." empty))
+(define LOR2 (cons "#...#...#.." (cons "..##......." empty)))
